@@ -12,6 +12,8 @@ import { PermissionModule } from '@modules/permission';
 import { AuditLogModule } from '@modules/audit-log';
 import { CreateAuditLogMiddleware } from '@shared/middlewares';
 
+import { VenueModule } from '@modules/venue/venue.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true, load: [databaseConfig] }),
@@ -29,6 +31,7 @@ import { CreateAuditLogMiddleware } from '@shared/middlewares';
     UserModule,
     PermissionModule,
     AuditLogModule,
+    VenueModule,
   ],
   controllers: [AppController],
 })

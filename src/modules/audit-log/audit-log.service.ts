@@ -17,8 +17,7 @@ export class AuditLogService {
   }
 
   async findAll(query: QueryAuditLogDto) {
-    const page = parseInt(query.page || '1', 10);
-    const limit = parseInt(query.limit || '20', 10);
+    const { page = 1, limit = 10 } = query;
     const skip = (page - 1) * limit;
 
     const filter: FilterQuery<AuditLogDocument> = {};

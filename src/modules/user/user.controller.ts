@@ -22,7 +22,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Permissions(PermissionEnum.CREATE_USER)
-  @Post('/create')
+  @Post('/')
   create(@Body() dto: CreateUserDto) {
     return this.userService.create(dto);
   }
@@ -40,13 +40,13 @@ export class UserController {
   }
 
   @Permissions(PermissionEnum.UPDATE_USER)
-  @Patch('/update/:id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateUserDto) {
     return this.userService.update(id, dto);
   }
 
   @Permissions(PermissionEnum.DELETE_USER)
-  @Delete('/delete/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.userService.remove(id);
   }

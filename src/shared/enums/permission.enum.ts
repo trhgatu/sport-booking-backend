@@ -9,6 +9,12 @@ export enum PermissionEnum {
   UPDATE_USER = 'update_user',
   DELETE_USER = 'delete_user',
 
+  // 🏟️ VENUE
+  CREATE_VENUE = 'create_venue',
+  READ_VENUE = 'read_venue',
+  UPDATE_VENUE = 'update_venue',
+  DELETE_VENUE = 'delete_venue',
+
   // 🧱 ROLE
   CREATE_ROLE = 'create_role',
   READ_ROLE = 'read_role',

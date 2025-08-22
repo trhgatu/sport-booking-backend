@@ -14,13 +14,10 @@ export class RoleService {
   }
 
   async findAll(query: QueryRoleDto) {
-    const page = parseInt(query.page || '1', 10);
-    const limit = parseInt(query.limit || '10', 10);
+    const { page = 1, limit = 10, keyword } = query;
     const skip = (page - 1) * limit;
 
-    const search = query.keyword
-      ? { name: { $regex: query.keyword, $options: 'i' } }
-      : {};
+    const search = keyword ? { name: { $regex: keyword, $options: 'i' } } : {};
 
     return paginate(
       this.roleModel
