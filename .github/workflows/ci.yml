@@ -2,9 +2,9 @@ name: CI - Lint & Docker Build
 
 on:
   push:
-    branches: ['*']
+    branches: ['**']
   pull_request:
-    branches: ['*']
+    branches: ['**']
 jobs:
   lint-and-build:
     runs-on: ubuntu-latest
