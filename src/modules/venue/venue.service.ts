@@ -21,7 +21,10 @@ export class VenueService {
     const { page = 1, limit = 10, keyword } = query;
     const skip = (page - 1) * limit;
 
-    const search = keyword ? { name: { $regex: keyword, $options: 'i' } } : {};
+    const baseFilter = { isDeleted: false };
+    const search = keyword
+      ? { ...baseFilter, name: { $regex: keyword, $options: 'i' } }
+      : baseFilter;
 
     const cacheKey = `venues:all:${keyword || 'all'}:p${page}:l${limit}`;
     const cached = await this.cacheService.get(cacheKey);
@@ -39,9 +42,12 @@ export class VenueService {
   }
 
   async findById(id: string) {
-    const Venue = await this.VenueModel.findById(id).populate('ownerId');
-    if (!Venue) throw new NotFoundException('Venue not found');
-    return Venue;
+    const venue = await this.VenueModel.findOne({
+      _id: id,
+      isDeleted: false,
+    }).populate('ownerId');
+    if (!venue) throw new NotFoundException('Venue not found');
+    return venue;
   }
 
   async update(id: string, dto: UpdateVenueDto) {
@@ -54,11 +60,35 @@ export class VenueService {
     return updated;
   }
 
-  async remove(id: string) {
+  async restore(id: string) {
+    const venue = await this.VenueModel.findByIdAndUpdate(
+      id,
+      { isDeleted: false },
+      { new: true },
+    );
+    if (!venue) throw new NotFoundException('Venue not found');
+
+    await this.cacheService.deleteByPattern('venues:all:*');
+    return venue;
+  }
+
+  async hardDelete(id: string) {
     const deleted = await this.VenueModel.findByIdAndDelete(id);
     if (!deleted) throw new NotFoundException('Venue not found');
 
     await this.cacheService.deleteByPattern('venues:all:*');
     return deleted;
+  }
+
+  async softDelete(id: string) {
+    const venue = await this.VenueModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true },
+    );
+    if (!venue) throw new NotFoundException('Venue not found');
+
+    await this.cacheService.deleteByPattern('venues:all:*');
+    return venue;
   }
 }

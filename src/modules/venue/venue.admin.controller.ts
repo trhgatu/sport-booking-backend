@@ -51,7 +51,19 @@ export class VenueAdminController {
 
   @Permissions(PermissionEnum.DELETE_VENUE)
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.venueService.remove(id);
+  softDelete(@Param('id') id: string) {
+    return this.venueService.softDelete(id);
+  }
+
+  @Permissions(PermissionEnum.DELETE_VENUE)
+  @Delete(':id/hard')
+  hardDelete(@Param('id') id: string) {
+    return this.venueService.hardDelete(id);
+  }
+
+  @Permissions(PermissionEnum.UPDATE_VENUE)
+  @Patch(':id/restore')
+  restore(@Param('id') id: string) {
+    return this.venueService.restore(id);
   }
 }
