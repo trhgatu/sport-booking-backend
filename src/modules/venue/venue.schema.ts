@@ -64,6 +64,9 @@ export class Venue {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'User' })
   ownerId?: Types.ObjectId;
 
+  @Prop({ default: false })
+  isDeleted!: boolean;
+
   @Prop()
   deletedAt?: Date;
 }

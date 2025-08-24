@@ -14,4 +14,7 @@ export class QueryVenueDto extends QueryPaginationDto {
   @IsOptional()
   @IsEnum(SportType)
   sportType?: SportType;
+
+  @IsOptional()
+  isDeleted?: boolean;
 }
