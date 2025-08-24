@@ -21,7 +21,7 @@ import { Permissions } from '@shared/decorators';
 import { JwtAuthGuard } from '@modules/auth/guards';
 
 @UseGuards(JwtAuthGuard, PermissionsGuard)
-@Controller('venues')
+@Controller('admin/venues')
 export class VenueAdminController {
   constructor(private readonly venueService: VenueService) {}
 
