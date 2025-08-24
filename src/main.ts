@@ -7,6 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   await initRedis();
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.setGlobalPrefix('api/v1');
 
   // Swagger setup
   const config = new DocumentBuilder()
