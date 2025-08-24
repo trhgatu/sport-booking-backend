@@ -14,6 +14,14 @@ export enum PermissionEnum {
   READ_VENUE = 'read_venue',
   UPDATE_VENUE = 'update_venue',
   DELETE_VENUE = 'delete_venue',
+  RESTORE_VENUE = 'restore_venue',
+
+  //COURT
+  CREATE_COURT = 'create_court',
+  READ_COURT = 'read_court',
+  UPDATE_COURT = 'update_court',
+  DELETE_COURT = 'delete_court',
+  RESTORE_COURT = 'restore_court',
 
   // 🧱 ROLE
   CREATE_ROLE = 'create_role',

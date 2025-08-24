@@ -13,6 +13,7 @@ import { AuditLogModule } from '@modules/audit-log';
 import { CreateAuditLogMiddleware } from '@shared/middlewares';
 
 import { VenueModule } from '@modules/venue/venue.module';
+import { CourtModule } from '@modules/court/court.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { VenueModule } from '@modules/venue/venue.module';
     PermissionModule,
     AuditLogModule,
     VenueModule,
+    CourtModule,
   ],
   controllers: [AppController],
 })
