@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateCourtDto, UpdateCourtDto, QueryCourtDto } from './dtos';
 import { paginate } from '@shared/utils';
 import { CacheService } from '@shared/services/cache.service';
+import { CourtStatus } from '@shared/enums';
 
 @Injectable()
 export class CourtService {
@@ -90,5 +91,39 @@ export class CourtService {
 
     await this.cacheService.deleteByPattern('courts:all:*');
     return Court;
+  }
+  async findAllForPublic(query: QueryCourtDto) {
+    const { page = 1, limit = 10, keyword } = query;
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      isDeleted: false,
+      status: CourtStatus.ACTIVE,
+      ...(keyword ? { name: { $regex: keyword, $options: 'i' } } : {}),
+    };
+
+    const cacheKey = `courts:public:${keyword || 'all'}:p${page}:l${limit}`;
+    const cached = await this.cacheService.get(cacheKey);
+    if (cached) return cached;
+
+    const result = await paginate(
+      this.CourtModel.find(filter).skip(skip).limit(limit),
+      this.CourtModel.countDocuments(filter),
+      page,
+      limit,
+    );
+
+    await this.cacheService.set(cacheKey, result, 60);
+    return result;
+  }
+
+  async findPublicById(id: string) {
+    const court = await this.CourtModel.findOne({
+      _id: id,
+      isDeleted: false,
+      status: CourtStatus.ACTIVE,
+    });
+    if (!court) throw new NotFoundException('Court not found');
+    return court;
   }
 }
