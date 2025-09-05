@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { PermissionEnum } from '@shared/enums';
-import { CourtService } from './court.service';
+import { CourtService } from '../court.service';
 import {
   CreateCourtDto,
   QueryCourtDto,
@@ -26,13 +26,13 @@ export class CourtAdminController {
   constructor(private readonly courtService: CourtService) {}
 
   @Permissions(PermissionEnum.CREATE_COURT)
-  @Post('/')
+  @Post()
   create(@Body() dto: CreateCourtDto) {
     return this.courtService.create(dto);
   }
 
   @Permissions(PermissionEnum.READ_COURT)
-  @Get('/')
+  @Get()
   findAll(@Query() query: QueryCourtDto) {
     return this.courtService.findAll(query);
   }
@@ -51,14 +51,10 @@ export class CourtAdminController {
 
   @Permissions(PermissionEnum.DELETE_COURT)
   @Delete(':id')
-  softDelete(@Param('id') id: string) {
-    return this.courtService.softDelete(id);
-  }
-
-  @Permissions(PermissionEnum.DELETE_COURT)
-  @Delete(':id/hard')
-  hardDelete(@Param('id') id: string) {
-    return this.courtService.hardDelete(id);
+  delete(@Param('id') id: string, @Query('hard') hard?: 'true') {
+    return hard === 'true'
+      ? this.courtService.hardDelete(id)
+      : this.courtService.softDelete(id);
   }
 
   @Permissions(PermissionEnum.RESTORE_COURT)
