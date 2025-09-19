@@ -1,7 +1,11 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { Venue, VenueSchema } from './venue.schema';
-import { VenueAdminController } from './venue.admin.controller';
+import {
+  VenuePublicController,
+  VenueAdminController,
+} from '@modules/venue/controllers';
+
 import { VenueService } from './venue.service';
 import { SharedModule } from '@shared/shared.module';
 
@@ -10,7 +14,7 @@ import { SharedModule } from '@shared/shared.module';
     MongooseModule.forFeature([{ name: Venue.name, schema: VenueSchema }]),
     SharedModule,
   ],
-  controllers: [VenueAdminController],
+  controllers: [VenueAdminController, VenuePublicController],
   providers: [VenueService],
   exports: [VenueService],
 })
