@@ -23,6 +23,13 @@ export enum PermissionEnum {
   DELETE_COURT = 'delete_court',
   RESTORE_COURT = 'restore_court',
 
+  //SPORT
+  CREATE_SPORT = 'create_sport',
+  READ_SPORT = 'read_sport',
+  UPDATE_SPORT = 'update_sport',
+  DELETE_SPORT = 'delete_sport',
+  RESTORE_SPORT = 'restore_sport',
+
   // 🧱 ROLE
   CREATE_ROLE = 'create_role',
   READ_ROLE = 'read_role',
