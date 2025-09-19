@@ -19,12 +19,12 @@ import {
 export class PermissionController {
   constructor(private readonly permissionService: PermissionService) {}
 
-  @Post('/create')
+  @Post()
   create(@Body() dto: CreatePermissionDto) {
     return this.permissionService.create(dto);
   }
 
-  @Get('/')
+  @Get()
   findAll(@Query() query: QueryPermissionDto) {
     return this.permissionService.findAll(query);
   }
@@ -34,12 +34,12 @@ export class PermissionController {
     return this.permissionService.findById(id);
   }
 
-  @Patch('/update/:id')
+  @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdatePermissionDto) {
     return this.permissionService.update(id, dto);
   }
 
-  @Delete('/delete/:id')
+  @Delete(':id')
   remove(@Param('id') id: string) {
     return this.permissionService.remove(id);
   }
