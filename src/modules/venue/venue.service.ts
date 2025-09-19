@@ -5,6 +5,7 @@ import { Model } from 'mongoose';
 import { CreateVenueDto, UpdateVenueDto, QueryVenueDto } from './dtos';
 import { paginate } from '@shared/utils';
 import { CacheService } from '@shared/services/cache.service';
+import { VenueStatus } from '@shared/enums';
 
 @Injectable()
 export class VenueService {
@@ -89,6 +90,41 @@ export class VenueService {
     if (!venue) throw new NotFoundException('Venue not found');
 
     await this.cacheService.deleteByPattern('venues:all:*');
+    return venue;
+  }
+
+  async findAllForPublic(query: QueryVenueDto) {
+    const { page = 1, limit = 10, keyword } = query;
+    const skip = (page - 1) * limit;
+
+    const filter = {
+      isDeleted: false,
+      status: VenueStatus.ACTIVE,
+      ...(keyword ? { name: { $regex: keyword, $options: 'i' } } : {}),
+    };
+
+    const cacheKey = `venues:public:${keyword || 'all'}:p${page}:l${limit}`;
+    const cached = await this.cacheService.get(cacheKey);
+    if (cached) return cached;
+
+    const result = await paginate(
+      this.VenueModel.find(filter).skip(skip).limit(limit),
+      this.VenueModel.countDocuments(filter),
+      page,
+      limit,
+    );
+
+    await this.cacheService.set(cacheKey, result, 60);
+    return result;
+  }
+
+  async findPublicById(id: string) {
+    const venue = await this.VenueModel.findOne({
+      _id: id,
+      isDeleted: false,
+      status: VenueStatus.ACTIVE,
+    });
+    if (!venue) throw new NotFoundException('Venue not found');
     return venue;
   }
 }
